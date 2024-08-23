@@ -1,5 +1,6 @@
 import { OrgAlreadyExistsError } from "@/use-cases/errors/org-already-exists-error";
 import { makeRegisterOrgUseCase } from "@/use-cases/factories/make-org-register-use-case";
+import { Role } from "@prisma/client";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
 
@@ -12,10 +13,19 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
     address: z.string(),
     phone: z.string(),
     password: z.string().min(6),
+    role: z.enum([Role.ADMIN, Role.MEMBER]),
   });
 
-  const { name_org, responsible_org, email, cep, address, phone, password } =
-    registerBodySchema.parse(request.body);
+  const {
+    name_org,
+    responsible_org,
+    email,
+    cep,
+    address,
+    phone,
+    password,
+    role,
+  } = registerBodySchema.parse(request.body);
 
   try {
     const registerOrgUseCase = makeRegisterOrgUseCase();
@@ -28,6 +38,7 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
       address,
       phone,
       password,
+      role,
     });
   } catch (err) {
     if (err instanceof OrgAlreadyExistsError) {
