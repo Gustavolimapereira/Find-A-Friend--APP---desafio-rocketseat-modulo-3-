@@ -29,6 +29,23 @@ model Org {
   password_hash   String
   role            Role     @default(MEMBER)
   created_at      DateTime @default(now())
+  Pet             Pet[]
 
   @@map("org")
+}
+
+model Pet {
+  id         String   @id @default(uuid())
+  name_pet   String
+  age        String
+  city       String
+  color      String
+  size       String
+  gender     String
+  created_at DateTime @default(now())
+
+  org    Org    @relation(fields: [org_id], references: [id])
+  org_id String
+
+  @@map("pet")
 }

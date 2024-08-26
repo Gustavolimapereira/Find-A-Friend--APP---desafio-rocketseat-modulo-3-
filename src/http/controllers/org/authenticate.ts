@@ -14,6 +14,8 @@ export async function authenticate(
 
   const { email, password } = authenticateBodySchema.parse(request.body);
 
+  console.log(request.body, "rota de autenticação");
+
   try {
     const authenticateUseCase = makeAuthenticateOrgUseCase();
 
