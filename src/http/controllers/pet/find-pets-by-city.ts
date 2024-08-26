@@ -8,17 +8,23 @@ export async function findPetByCity(
 ) {
   const findPetByCityBodySchema = z.object({
     city: z.string(),
+    color: z.string().optional(),
+    size: z.string().optional(),
+    gender: z.string().optional(),
   });
 
-  const { city } = findPetByCityBodySchema.parse(request.query);
-
-  console.log(city);
+  const { city, color, size, gender } = findPetByCityBodySchema.parse(
+    request.query,
+  );
 
   try {
     const findbyCityPetUseCase = makeFindByCityPetUseCase();
 
     const pets = await findbyCityPetUseCase.execute({
       city,
+      color,
+      size,
+      gender,
     });
     return reply.status(200).send(pets);
   } catch (err) {

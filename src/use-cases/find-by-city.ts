@@ -3,6 +3,9 @@ import { Pet } from "@prisma/client";
 
 interface FindByCityPetUseCaseRequest {
   city: string;
+  color?: string;
+  size?: string;
+  gender?: string;
 }
 
 interface FindByCityPetUseCaseResponse {
@@ -14,8 +17,16 @@ export class FindPetByCity {
 
   async execute({
     city,
+    color,
+    size,
+    gender,
   }: FindByCityPetUseCaseRequest): Promise<FindByCityPetUseCaseResponse> {
-    const pets = await this.petRepository.findByCity(city);
+    const pets = await this.petRepository.findByCity({
+      city,
+      color,
+      size,
+      gender,
+    });
 
     if (!pets) {
       throw new Error(
